@@ -14,7 +14,6 @@ st.bar_chart(df, x="Category", y="Sales")
 
 # Now let's do the same graph where we do the aggregation first in Pandas... (this results in a chart with solid bars)
 
-
 category = st.selectbox("Select a Category", df['Category'].unique())
 # Using as_index=False here preserves the Category as a column.  If we exclude that, Category would become the datafram index and we would need to use x=None to tell bar_chart to use the index
 st.bar_chart(df.groupby("Category", as_index=False).sum(), x="Category", y="Sales", color="#04f")
@@ -41,6 +40,7 @@ st.write("### (2) add a multi-select for Sub_Category *in the selected Category 
 
 
 st.write("### (3) show a line chart of sales for the selected items in (2)")
+st.line_chart(Sub_Category, y="Chart of Sub Category Sales")
 
 st.write("### (4) show three metrics (https://docs.streamlit.io/library/api-reference/data/st.metric) for the selected items in (2): total sales, total profit, and overall profit margin (%)")
 
