@@ -19,6 +19,8 @@ category = st.selectbox("Select a Category", df['Category'].unique())
 # Using as_index=False here preserves the Category as a column.  If we exclude that, Category would become the datafram index and we would need to use x=None to tell bar_chart to use the index
 st.bar_chart(df.groupby("Category", as_index=False).sum(), x="Category", y="Sales", color="#04f")
 
+sub_categories = st.multiselect("Select Sub_Categories", df[df['Category'] == category]['Sub_Category'].unique())
+
 # Aggregating by time
 # Here we ensure Order_Date is in datetime format, then set is as an index to our dataframe
 df["Order_Date"] = pd.to_datetime(df["Order_Date"])
@@ -36,7 +38,6 @@ st.write("### (1) add a drop down for Category (https://docs.streamlit.io/librar
 st.dataframe(df.groupby("Category").sum())
 
 st.write("### (2) add a multi-select for Sub_Category *in the selected Category (1)* (https://docs.streamlit.io/library/api-reference/widgets/st.multiselect)")
-sub_categories = st.multiselect("Select Sub_Categories", df[df['Category'] == category]['Sub_Category'].unique())
 
 st.write("### (3) show a line chart of sales for the selected items in (2)")
 
