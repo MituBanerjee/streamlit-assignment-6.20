@@ -42,7 +42,5 @@ st.write("### (5) use the delta option in the overall profit margin metric to sh
 # Multi-select for sub-categories based on selected category
 selected_sub_categories = st.multiselect('Select Sub-Categories', categories[selected_category])
 
-# Display selected category and sub-categories
-st.write(f'You selected Category: {selected_category}')
-st.write(f'You selected Sub-Categories: {selected_sub_categories}')
+
 
