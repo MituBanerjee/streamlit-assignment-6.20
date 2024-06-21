@@ -45,7 +45,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
-chart_data = pd.read_csv ("Superstore_Sales_utf8.csv"(20,3) columns=["Sub_Category"])
+chart_data = pd.read_csv (Superstore_Sales_utf8.csv(20,3) columns=["Sub_Category"])
 
 st.line_chart(chart_data)
 
