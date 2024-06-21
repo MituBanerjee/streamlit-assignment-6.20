@@ -41,7 +41,13 @@ st.write("### (2) add a multi-select for Sub_Category *in the selected Category 
 
 
 st.write("### (3) show a line chart of sales for the selected items in (2)")
+import streamlit as st
+import pandas as pd
+import numpy as np
 
+chart_data = pd.read_csv("Superstore_Sales_utf8.csv" (20,3) columns=["Sub_Category"])
+
+st.line_chart(chart_data)
 
 st.write("### (4) show three metrics (https://docs.streamlit.io/library/api-reference/data/st.metric) for the selected items in (2): total sales, total profit, and overall profit margin (%)")
 
