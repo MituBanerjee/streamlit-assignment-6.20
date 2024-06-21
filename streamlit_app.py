@@ -13,7 +13,7 @@ st.dataframe(df)
 st.bar_chart(df, x="Category", y="Sales")
 
 # Now let's do the same graph where we do the aggregation first in Pandas... (this results in a chart with solid bars)
-st.dataframe(df.groupby("Category").sum())
+
 
 category = st.selectbox("Select a Category", df['Category'].unique())
 # Using as_index=False here preserves the Category as a column.  If we exclude that, Category would become the datafram index and we would need to use x=None to tell bar_chart to use the index
@@ -33,14 +33,19 @@ st.line_chart(sales_by_month, y="Sales")
 
 st.write("## Your additions")
 st.write("### (1) add a drop down for Category (https://docs.streamlit.io/library/api-reference/widgets/st.selectbox)")
+st.dataframe(df.groupby("Category").sum())
+
 st.write("### (2) add a multi-select for Sub_Category *in the selected Category (1)* (https://docs.streamlit.io/library/api-reference/widgets/st.multiselect)")
+sub_categories = st.multiselect("Select Sub_Categories", df[df['Category'] == category]['Sub_Category'].unique())
+
 st.write("### (3) show a line chart of sales for the selected items in (2)")
+
 st.write("### (4) show three metrics (https://docs.streamlit.io/library/api-reference/data/st.metric) for the selected items in (2): total sales, total profit, and overall profit margin (%)")
+
 st.write("### (5) use the delta option in the overall profit margin metric to show the difference between the overall average profit margin (all products across all categories)")
 
 
-# Multi-select for sub-categories based on selected category
-selected_sub_categories = st.multiselect('Select Sub-Categories', categories[selected_category])
+
 
 
 
