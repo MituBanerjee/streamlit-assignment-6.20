@@ -26,24 +26,23 @@ sub_categories = st.multiselect("Select Sub_Categories", df[df['Category'] == ca
 # (3) show a line chart of sales for the selected items in (2)
 
 # Filter data based on selected category and sub-categories
-    filtered_data = df[(df['Category'] == category) & (df['Sub_Category'].isin(sub_categories))]
+filtered_data = df[(df['Category'] == category) & (df['Sub_Category'].isin(sub_categories))]
 
-    # Line chart using Altair
-    line_chart = alt.Chart(filtered_data).mark_line().encode(
-        x='Date:T',  # 'T' indicates temporal data (dates)
-        y='Sales:Q',  # 'Q' indicates quantitative data (sales)
-        color='Sub_Category:N',  # 'N' indicates nominal data (sub-categories)
-        tooltip=['Date', 'Sales', 'Sub_Category']
-    ).properties(
-        width=800,
-        height=400
-    ).interactive()
+# Line chart using Altair
+line_chart = alt.Chart(filtered_data).mark_line().encode(
+x='Date:T',  # 'T' indicates temporal data (dates)
+y='Sales:Q',  # 'Q' indicates quantitative data (sales)
+color='Sub_Category:N',  # 'N' indicates nominal data (sub-categories)
+tooltip=['Date', 'Sales', 'Sub_Category']
+ ).properties(
+width=800,
+height=400 ).interactive()
 
-    # Display line chart
-    st.altair_chart(line_chart, use_container_width=True)
+# Display line chart
+st.altair_chart(line_chart, use_container_width=True)
 
 if __name__ == "__main__":
-    main()
+main()
 
 
 
