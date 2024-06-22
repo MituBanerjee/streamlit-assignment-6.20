@@ -27,10 +27,39 @@ sub_categories = st.multiselect("Select Sub_Categories", df[df['Category'] == ca
 if selected_sub_categories:
     filtered_df = filtered_df[filtered_df['Sub_Category'].isin(selected_sub_categories)]
 
+
+    
 # Aggregating by time
+
+# Filter data based on selected category and sub-categories
+    filtered_data = df[(df['Category'] == category) & (df['Sub_Category'].isin(sub_categories))]
+
+    # Line chart using Altair
+    line_chart = alt.Chart(filtered_data).mark_line().encode(
+        x='Date:T',  # 'T' indicates temporal data (dates)
+        y='Sales:Q',  # 'Q' indicates quantitative data (sales)
+        color='Sub_Category:N',  # 'N' indicates nominal data (sub-categories)
+        tooltip=['Date', 'Sales', 'Sub_Category']
+    ).properties(
+        width=800,
+        height=400
+    ).interactive()
+
+    # Display line chart
+    st.altair_chart(line_chart, use_container_width=True)
+
+if __name__ == "__main__":
+    main()
+
+
+
+
+
+
 # Here we ensure Order_Date is in datetime format, then set is as an index to our dataframe
 df["Order_Date"] = pd.to_datetime(df["Order_Date"])
 df.set_index('Order_Date', inplace=True)
+
 # Here the Grouper is using our newly set index to group by Month ('M')
 sales_by_month = df.filter(items=['Sales']).groupby(pd.Grouper(freq='M')).sum()
 
