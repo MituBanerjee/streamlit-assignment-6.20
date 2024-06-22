@@ -23,6 +23,9 @@ st.bar_chart(df.groupby("Category", as_index=False).sum(), x="Category", y="Sale
 # (2) add a multi-select for Sub_Category in the selected Category 
 sub_categories = st.multiselect("Select Sub_Categories", df[df['Category'] == category]['Sub_Category'].unique())
 
+# (3) show a line chart of sales for the selected items in (2)
+if selected_sub_categories:
+    filtered_df = filtered_df[filtered_df['Sub_Category'].isin(selected_sub_categories)]
 
 # Aggregating by time
 # Here we ensure Order_Date is in datetime format, then set is as an index to our dataframe
