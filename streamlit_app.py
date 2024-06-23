@@ -14,7 +14,7 @@ st.bar_chart(df, x="Category", y="Sales")
 
 # Now let's do the same graph where we do the aggregation first in Pandas... (this results in a chart with solid bars)
 st.dataframe(df.groupby("Category").sum())
-# Using as_index=False here preserves the Category as a column.  If we exclude that, Category would become the datafram index and we would need to use x=None to tell bar_chart to use the index
+# Using as_index=False here preserves the Category as a column.  If we exclude that, Category would become the dataframe index and we would need to use x=None to tell bar_chart to use the index
 st.bar_chart(df.groupby("Category", as_index=False).sum(), x="Category", y="Sales", color="#04f")
 
 # Aggregating by time
@@ -28,6 +28,38 @@ st.dataframe(sales_by_month)
 
 # Here the grouped months are the index and automatically used for the x axis
 st.line_chart(sales_by_month, y="Sales")
+
+# (1) add a drop down for Category)
+category = st.selectbox('Select Category', df['Category'].unique())
+filtered_df = df[df['Category']==category]
+
+# (2) add a multi-select for Sub_Category
+sub_categories = filtered_df['Sub_Category'].unique()
+selected_sub_categories = st.multiselect('Select Sub-category', sub_categories)
+
+# (3) show a line chart of sales for sub-category
+if selected_sub_categories:
+    filtered_df = filtered_df[filtered_df['Sub_Category'].isin(selected_sub_categories)]
+    
+sales_by_month = filtered_df.groupby(pd.Grouper(freq='M')).sum()[['Sales']]
+st.line_chart(sales_by_month)
+
+# (4) show three metrics
+total_sales = filtered_df['Sales'].sum()
+total_quantity = filtered_df['Quantity'].sum()
+total_profit = filtered_df['Profit'].sum()
+
+# (5) overall profit margin metric
+overall_total_profit = df['Profit'].sum()
+overall_total_sales = df['Sales'].sum()
+overall_profit_margin = overall_total_profit / overall_total_sales * 100
+selected_profit_margin = total_profit / total_sales * 100 if total_sales != 0 else 0
+profit_margin_delta = selected_profit_margin - overall_profit_margin
+    
+col1, col2, col3 = st.columns(3)
+col1.metric("Total Sales", f"${total_sales:,.2f}")
+col2.metric("Total Quanity", f"{total_quantity}")
+col3.metric("Total Profit", f"${total_profit:,.2f}", delta=f"{profit_margin_delta:.2f}%")
 
 st.write("## Your additions")
 st.write("### (1) add a drop down for Category (https://docs.streamlit.io/library/api-reference/widgets/st.selectbox)")
