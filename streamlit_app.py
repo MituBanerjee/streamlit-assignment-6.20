@@ -15,7 +15,7 @@ st.bar_chart(df, x="Category", y="Sales")
 # Now let's do the same graph where we do the aggregation first in Pandas... (this results in a chart with solid bars)
 
 # (1) add a drop down for Category 
-category = st.selectbox("Select a Category", df['Category'].unique())
+selected_category = st.selectbox("Select a Category", df['Category'].unique())
 
 # Using as_index=False here preserves the Category as a column.  If we exclude that, Category would become the datafram index and we would need to use x=None to tell bar_chart to use the index
 st.bar_chart(df.groupby("Category", as_index=False).sum(), x="Category", y="Sales", color="#04f")
