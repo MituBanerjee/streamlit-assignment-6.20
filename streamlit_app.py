@@ -60,7 +60,6 @@ profit_margin_delta = overall_profit_margin - overall_avg_profit_margin
 
 st.write(f"Delta from Overall Average Profit Margin: {profit_margin_delta:.2f}%")
 
-else:
 st.write("Please select at least one sub-category to see the line chart and metrics.") 
 
 st.write("## Your additions")
