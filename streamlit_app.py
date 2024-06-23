@@ -24,7 +24,25 @@ st.bar_chart(df.groupby("Category", as_index=False).sum(), x="Category", y="Sale
 sub_categories = st.multiselect("Select Sub_Categories", df[df['Category'] == category]['Sub_Category'].unique())
 
 # (3) show a line chart of sales for the selected items in (2)
-    
+    # Line chart for sales of selected sub-categories
+if len(sub_categories) > 0:
+    st.subheader(f"Line Chart of Sales for Selected Sub-Categories")
+    sales_by_sub_category = filtered_df.groupby(['Sub_Category', pd.Grouper(key='Order_Date', freq='M')]).sum().reset_index()
+
+    line_chart = alt.Chart(sales_by_sub_category).mark_line().encode(
+        x='Order_Date:T',
+        y='Sales:Q',
+        color='Sub_Category:N',
+        tooltip=['Order_Date', 'Sales', 'Sub_Category']
+    ).properties(
+        width=800,
+        height=400
+    ).interactive()
+
+    # Display the line chart using Altair
+    st.altair_chart(line_chart)
+else:
+    st.write("Please select at least one sub-category to see the line chart.")
 # Aggregating by time
 
 # Here we ensure Order_Date is in datetime format, then set is as an index to our dataframe
