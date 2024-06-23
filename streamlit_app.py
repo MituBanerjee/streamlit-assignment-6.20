@@ -58,7 +58,10 @@ st.write(f"Overall Profit Margin: {overall_profit_margin:.2f}%")
 overall_avg_profit_margin = (df['Profit'].sum() / df['Sales'].sum()) * 100
 profit_margin_delta = overall_profit_margin - overall_avg_profit_margin
 
+st.write(f"Delta from Overall Average Profit Margin: {profit_margin_delta:.2f}%")
 
+else:
+st.write("Please select at least one sub-category to see the line chart and metrics.") 
 
 st.write("## Your additions")
 st.write("### (1) add a drop down for Category (https://docs.streamlit.io/library/api-reference/widgets/st.selectbox)")
