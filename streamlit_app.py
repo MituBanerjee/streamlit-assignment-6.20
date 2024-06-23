@@ -1,33 +1,36 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
-import math
+import altair as alt
 
+# Title and input data
 st.title("Data App Assignment, on June 20th")
-
 st.write("### Input Data and Examples")
-df = pd.read_csv("Superstore_Sales_utf8.csv", parse_dates=True)
+
+# Load data from CSV
+df = pd.read_csv("Superstore_Sales_utf8.csv", parse_dates=['Order_Date'])
+
+# Display the dataframe
 st.dataframe(df)
 
-# This bar chart will not have solid bars--but lines--because the detail data is being graphed independently
-st.bar_chart(df, x="Category", y="Sales")
-
-# Now let's do the same graph where we do the aggregation first in Pandas... (this results in a chart with solid bars)
-
-# (1) add a drop down for Category 
+# Dropdown for selecting Category
 selected_category = st.selectbox("Select a Category", df['Category'].unique())
 
-# Using as_index=False here preserves the Category as a column.  If we exclude that, Category would become the datafram index and we would need to use x=None to tell bar_chart to use the index
-st.bar_chart(df.groupby("Category", as_index=False).sum(), x="Category", y="Sales", color="#04f")
+# Multi-select for selecting Sub_Categories in the selected Category
+sub_categories = st.multiselect("Select Sub-Categories", df[df['Category'] == selected_category]['Sub_Category'].unique())
 
-# (2) add a multi-select for Sub_Category in the selected Category 
-sub_categories = st.multiselect("Select Sub_Categories", df[df['Category'] == category]['Sub_Category'].unique())
 # Filtered data based on selected category and sub-categories
 filtered_df = df[(df['Category'] == selected_category) & (df['Sub_Category'].isin(sub_categories))]
 
+# Bar chart without aggregation
+st.subheader(f"Bar Chart for Category: {selected_category}")
+st.bar_chart(filtered_df, x="Sub_Category", y="Sales")
 
-# (3) show a line chart of sales for the selected items in (2)
-    # Line chart for sales of selected sub-categories
+# Bar chart with aggregation (solid bars)
+st.subheader(f"Aggregated Bar Chart for Category: {selected_category}")
+sales_by_category = filtered_df.groupby("Sub_Category", as_index=False).sum()
+st.bar_chart(sales_by_category, x="Sub_Category", y="Sales", color="#04f")
+
+# Line chart for sales of selected sub-categories
 if len(sub_categories) > 0:
     st.subheader(f"Line Chart of Sales for Selected Sub-Categories")
     sales_by_sub_category = filtered_df.groupby(['Sub_Category', pd.Grouper(key='Order_Date', freq='M')]).sum().reset_index()
@@ -46,19 +49,6 @@ if len(sub_categories) > 0:
     st.altair_chart(line_chart)
 else:
     st.write("Please select at least one sub-category to see the line chart.")
-# Aggregating by time
-
-# Here we ensure Order_Date is in datetime format, then set is as an index to our dataframe
-df["Order_Date"] = pd.to_datetime(df["Order_Date"])
-df.set_index('Order_Date', inplace=True)
-
-# Here the Grouper is using our newly set index to group by Month ('M')
-sales_by_month = df.filter(items=['Sales']).groupby(pd.Grouper(freq='M')).sum()
-
-st.dataframe(sales_by_month)
-
-# Here the grouped months are the index and automatically used for the x axis
-st.line_chart(sales_by_month, y="Sales")
 
 st.write("## Your additions")
 st.write("### (1) add a drop down for Category (https://docs.streamlit.io/library/api-reference/widgets/st.selectbox)")
