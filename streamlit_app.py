@@ -39,7 +39,7 @@ selected_sub_categories = st.multiselect('Select Sub-category', sub_categories)
 
 # (3) Line chart for sales of selected sub-categories
 if len(sub_categories) > 0:
-st.subheader(f"Line Chart of Sales for Selected Sub-Categories")
+  st.subheader(f"Line Chart of Sales for Selected Sub-Categories")
 sales_by_sub_category = filtered_df.groupby(['Sub_Category', pd.Grouper(key='Order_Date', freq='M')]).sum().reset_index()
 
 line_chart = st.line_chart(sales_by_sub_category)
