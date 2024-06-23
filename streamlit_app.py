@@ -37,29 +37,31 @@ filtered_df = df[df['Category']==category]
 sub_categories = filtered_df['Sub_Category'].unique()
 selected_sub_categories = st.multiselect('Select Sub-category', sub_categories)
 
-# (3) show a line chart of sales for sub-category
-if selected_sub_categories:
-    filtered_df = filtered_df[filtered_df['Sub_Category'].isin(selected_sub_categories)]
-    
-sales_by_month = filtered_df.groupby(pd.Grouper(freq='M')).sum()[['Sales']]
-st.line_chart(sales_by_month)
+# (3) Line chart for sales of selected sub-categories
+if len(sub_categories) > 0:
+    st.subheader(f"Line Chart of Sales for Selected Sub-Categories")
+    sales_by_sub_category = filtered_df.groupby(['Sub_Category', pd.Grouper(key='Order_Date', freq='M')]).sum().reset_index()
 
-# (4) show three metrics
-total_sales = filtered_df['Sales'].sum()
-total_quantity = filtered_df['Quantity'].sum()
-total_profit = filtered_df['Profit'].sum()
+    line_chart = st.line_chart(sales_by_sub_category)
 
-# (5) overall profit margin metric
-overall_total_profit = df['Profit'].sum()
-overall_total_sales = df['Sales'].sum()
-overall_profit_margin = overall_total_profit / overall_total_sales * 100
-selected_profit_margin = total_profit / total_sales * 100 if total_sales != 0 else 0
-profit_margin_delta = selected_profit_margin - overall_profit_margin
-    
-col1, col2, col3 = st.columns(3)
-col1.metric("Total Sales", f"${total_sales:,.2f}")
-col2.metric("Total Quanity", f"{total_quantity}")
-col3.metric("Total Profit", f"${total_profit:,.2f}", delta=f"{profit_margin_delta:.2f}%")
+    # (4) Metrics for selected items in multi-select
+    st.subheader(f"Metrics for Selected Items")
+    total_sales = filtered_df['Sales'].sum()
+    total_profit = filtered_df['Profit'].sum()
+    overall_profit_margin = (total_profit / total_sales) * 100
+
+    st.write(f"Total Sales: ${total_sales:.2f}")
+    st.write(f"Total Profit: ${total_profit:.2f}")
+    st.write(f"Overall Profit Margin: {overall_profit_margin:.2f}%")
+
+    # (5) Delta in overall profit margin compared to overall average profit margin
+    overall_avg_profit_margin = (df['Profit'].sum() / df['Sales'].sum()) * 100
+    profit_margin_delta = overall_profit_margin - overall_avg_profit_margin
+
+    st.write(f"Delta from Overall Average Profit Margin: {profit_margin_delta:.2f}%")
+
+else:
+    st.write("Please select at least one sub-category to see the line chart and metrics.")
 
 st.write("## Your additions")
 st.write("### (1) add a drop down for Category (https://docs.streamlit.io/library/api-reference/widgets/st.selectbox)")
