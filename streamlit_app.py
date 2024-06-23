@@ -22,6 +22,9 @@ st.bar_chart(df.groupby("Category", as_index=False).sum(), x="Category", y="Sale
 
 # (2) add a multi-select for Sub_Category in the selected Category 
 sub_categories = st.multiselect("Select Sub_Categories", df[df['Category'] == category]['Sub_Category'].unique())
+# Filtered data based on selected category and sub-categories
+filtered_df = df[(df['Category'] == selected_category) & (df['Sub_Category'].isin(sub_categories))]
+
 
 # (3) show a line chart of sales for the selected items in (2)
     # Line chart for sales of selected sub-categories
