@@ -42,7 +42,7 @@ filtered_df = df[(df['Category'] == selected_category) & (df['Sub_Category'].isi
 
 # (3) Line chart for sales of selected sub-categories
 if len(sub_categories) > 0:
-st.subheader(f"Line Chart of Sales for Selected Sub-Categories")
+  st.subheader(f"Line Chart of Sales for Selected Sub-Categories")
 sales_by_sub_category = filtered_df.groupby(['Sub_Category', pd.Grouper(key='Order_Date', freq='M')]).sum().reset_index()
 
 line_chart = st.line_chart(data=sales_by_sub_category, x='Order_Date', y='Sales', group='Sub_Category')
