@@ -14,7 +14,7 @@ st.bar_chart(df, x="Category", y="Sales")
 
 # Now let's do the same graph where we do the aggregation first in Pandas... (this results in a chart with solid bars)
 st.dataframe(df.groupby("Category").sum())
-# Using as_index=False here preserves the Category as a column.  If we exclude that, Category would become the datafram index and we would need to use x=None to tell bar_chart to use the index
+# Using as_index=False here preserves the Category as a column.  If we exclude that, Category would become the dataframe index and we would need to use x=None to tell bar_chart to use the index
 st.bar_chart(df.groupby("Category", as_index=False).sum(), x="Category", y="Sales", color="#04f")
 
 # Aggregating by time
@@ -34,7 +34,7 @@ st.selectbox("Select a Category", df['Category'].unique())
 
 
 ### (2) add a multi-select for Sub_Category 
-sub_categories = st.multiselect("Select Sub_Categories", df[df['Category'] == category]['Sub_Category'].unique())
+sub_categories = st.multiselect("Select Sub_Category", df[df['Category'] == category]['Sub_Category'].unique())
 
 # Filter data based on selected sub-categories
 filtered_df = df[df['Sub_Category'].isin(sub_categories)]
