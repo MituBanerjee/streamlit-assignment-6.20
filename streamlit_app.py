@@ -23,11 +23,9 @@ sub_categories = st.multiselect("Select Sub-Categories", df[df['Category'] == se
 filtered_df = df[(df['Category'] == selected_category) & (df['Sub_Category'].isin(sub_categories))]
 
 # (3) Line chart for sales of selected sub-categories
-if len(sub_categories) > 0:
-    st.subheader(f"Line Chart of Sales for Selected Sub-Categories")
-    sales_by_sub_category = filtered_df.groupby(['Sub_Category', pd.Grouper(key='Order_Date', freq='M')]).sum().reset_index()
 
-    line_chart = st.line_chart(data=sales_by_sub_category, x='Order_Date', y='Sales', group='Sub_Category')
+sales_by_month_filtered = filtered_df.filter(items=['Sales']).groupby(pd.Grouper(freq='M')).sum()
+st.line_chart(sales_by_month_filtered, y="Sales")
 
     # (4) Metrics for selected items in multi-select
     st.subheader(f"Metrics for Selected Items")
