@@ -30,11 +30,12 @@ st.dataframe(sales_by_month)
 st.line_chart(sales_by_month, y="Sales")
 
 ### (1) Add a drop down for Category:
-st.selectbox("Select a Category", df['Category'].unique())
+category = st.selectbox("Select a Category", df['Category'].unique())
 
 
 ### (2) add a multi-select for Sub_Category 
-sub_categories = st.multiselect("Select Sub_Category", df[df['Category'] == category]['Sub_Category'].unique())
+sub_categories = st.multiselect("Select Sub_Categories", df[df['Category'] == category]['Sub_Category'].unique())
+
 
 # Filter data based on selected sub-categories
 filtered_df = df[df['Sub_Category'].isin(sub_categories)]
@@ -43,6 +44,7 @@ filtered_df = df[df['Sub_Category'].isin(sub_categories)]
 ### (3) show a line chart of sales
 sales_by_month_filtered = filtered_df.filter(items=['Sales']).groupby(pd.Grouper(freq='M')).sum()
 st.line_chart(sales_by_month_filtered, y="Sales")
+
 
 
 ### (4) show three metrics
