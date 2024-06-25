@@ -31,6 +31,7 @@ st.line_chart(sales_by_month, y="Sales")
 
 ### (1) Add a drop down for Category:
 st.selectbox("Select a Category", df['Category'].unique())
+filtered_df = df[df['Category']==category]
 
 ### (2) add a multi-select for Sub_Category 
 sub_categories = filtered_df['Sub_Category'].unique()
